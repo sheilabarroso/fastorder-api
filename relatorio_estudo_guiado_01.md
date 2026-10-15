@@ -73,10 +73,17 @@ Os testes em `test_app.py` usam o `test_client` do Flask e cobrem: soma de intei
 
 ---
 
-## Evidências do pipeline (preencher durante a gravação)
+## Evidências do pipeline
+
+Histórico real da aba [Actions](https://github.com/sheilabarroso/fastorder-api/actions) do repositório:
 
 | Execução | Commit | Resultado | O que aconteceu / aprendizado |
 |---|---|---|---|
-| 1 | (mensagem) | ✅ / ❌ | |
-| 2 — bug proposital (`+` → `-` na soma) | | ❌ falhou no passo 5 (pytest) | |
-| 3 — correção | | ✅ | |
+| Nenhuma | `b770b86` Primeiro commit: API Flask, testes, Dockerfile, README e relatório | Não executou | O código foi enviado antes do workflow. Sem o arquivo em `.github/workflows/`, não existe esteira. |
+| #1 | `5ec2815` Adiciona pipeline de CI (lint, testes e build Docker) | ✅ Sucesso (21 s) | Os 6 passos passaram e a imagem Docker foi construída. A partir daqui, cada push na `main` dispara a esteira. |
+| #2 | `7a6a845` Bug proposital: soma usa subtração (teste do Andon Cord) | ❌ Falhou no passo 5 (13 s) | O lint passou, pois o código continuava válido. O pytest reprovou `test_soma` (`assert -2 == 12`), `test_soma_decimais` (`assert -1 == 4`) e `test_soma_negativos` (`assert -6 == 0`): 3 failed, 7 passed. O passo 6 (docker build) não executou. |
+| #3 | `319a4d6` Corrige a soma: volta a usar a + b | ✅ Sucesso (29 s) | Os 10 testes passaram e a esteira voltou ao verde. |
+
+Os commits seguintes, como a atualização deste relatório, também disparam a esteira, o que mostra que todo push é validado.
+
+O GitHub também exibiu dois avisos nas execuções: as actions `checkout@v4` e `setup-python@v5` usam Node.js 20, que está obsoleto, e o rótulo `ubuntu-latest` passa a apontar para o Ubuntu 26 a partir de 19/10/2026. Os avisos não afetaram o resultado, mas mostram que a esteira também sinaliza manutenções futuras.
