@@ -33,7 +33,7 @@ def soma():
     a, b, erro = _ler_numeros()
     if erro:
         return jsonify({"erro": erro}), 400
-    return jsonify({"operacao": "soma", "resultado": _numero(a + b)})
+    return jsonify({"operacao": "soma", "resultado": _numero(a - b)})
 
 
 @app.route("/api/subtracao")
